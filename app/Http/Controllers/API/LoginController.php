@@ -40,7 +40,7 @@ class LoginController extends Controller
             'confirm_password' => 'required|string|min:6|same:password',
         ]);
 
-        $user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
