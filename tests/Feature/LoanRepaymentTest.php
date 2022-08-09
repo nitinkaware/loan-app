@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Loan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -29,16 +30,44 @@ class LoanRepaymentTest extends TestCase
     {
         $this->actingAs($this->user);
 
+        /** @var Loan $loan */
         $loan = $this->user->loans()->create([
             'amount_required' => '100',
-            'terms_in_week' => '3',
+            'terms_in_week' => '4',
         ]);
 
-        $this->postJson(route('api.loan-repayments.store', ['loan' => $loan->id, 'repayment']), [
-            'amount' => '50',
-        ]
-        )->assertStatus(202);
+        $loan->approve();
 
-        $this->assertEquals(1, $loan->loanRepayments()->count());
+        $loanRepayments = $loan->loanRepayments()->get();
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[0]->id]), [
+            'amount_paid' => '25',
+        ])->assertStatus(202);
+
+        $this->assertEquals(75, $loan->remainingDueAmount());
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[1]->id]), [
+            'amount_paid' => '25',
+        ])->assertStatus(202);
+//
+        $this->assertEquals(50, $loan->fresh()->remainingDueAmount());
+    }
+
+    /**
+     * Duplicate repayment is not allowed for single repayment id
+     *
+     * @return void
+     */
+    public function testDuplicateRepaymentIsNotAllowedForSingleRepaymentId()
+    {
+    }
+
+    /**
+     * A user can only make replayment for only related loan id that belongs to him.
+     *
+     * @return void
+     */
+    public function testAUserCanOnlyMakeRepaymentForOnlyRelatedLoanIdThatBelongsToHim()
+    {
     }
 }

@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->integer('amount_required');
+            $table->decimal('amount_required', 10, 2);
             $table->integer('terms_in_week');
             $table->enum('status', [Loan::PENDING, Loan::APPROVED, Loan::REJECTED, Loan::PAID])->default(Loan::PENDING);
             $table->timestamps();

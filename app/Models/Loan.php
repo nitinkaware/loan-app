@@ -40,6 +40,13 @@ class Loan extends Model
         return $this->hasMany(LoanRepayment::class);
     }
 
+    public function remainingDueAmount()
+    {
+        return $this->loanRepayments->sum(function (LoanRepayment $loanRepayment) {
+            return $loanRepayment->amount - $loanRepayment->amount_paid;
+        });
+    }
+
     public function approve(): bool
     {
         $this->status = self::APPROVED;
@@ -49,5 +56,10 @@ class Loan extends Model
         LoanHasApproved::dispatch($this);
 
         return true;
+    }
+
+    public function isFullyPaid(): bool
+    {
+        return $this->remainingDueAmount() === 0;
     }
 }
