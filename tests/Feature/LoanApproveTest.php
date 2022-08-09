@@ -2,15 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Events\LoanHasApproved;
 use App\Models\Loan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
-class LoanApproveTest extends TestCase {
-
+class LoanApproveTest extends TestCase
+{
     use RefreshDatabase;
 
     private User $user;
@@ -39,7 +37,7 @@ class LoanApproveTest extends TestCase {
             ->loans()
             ->create([
                 'amount_required' => '100',
-                'terms_in_week'   => '3',
+                'terms_in_week' => '3',
             ]);
 
         $loan = Loan::first();

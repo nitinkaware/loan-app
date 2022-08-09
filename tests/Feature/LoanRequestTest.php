@@ -31,7 +31,7 @@ class LoanRequestTest extends TestCase
 
         $response = $this->postJson(route('api.loan-requests'), [
             'amount_required' => '100',
-            'terms_in_week' => '6'
+            'terms_in_week' => '6',
         ]);
 
         $response->assertCreated();
@@ -53,16 +53,16 @@ class LoanRequestTest extends TestCase
         $payload = [
             [
                 'amount_required' => '',
-                'terms_in_week' => '6'
+                'terms_in_week' => '6',
             ],
             [
                 'amount_required' => '100',
-                'terms_in_week' => ''
+                'terms_in_week' => '',
             ],
             [
                 'amount_required' => '',
-                'terms_in_week' => ''
-            ]
+                'terms_in_week' => '',
+            ],
         ];
 
         foreach ($payload as $item) {

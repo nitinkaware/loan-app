@@ -6,8 +6,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class LoanRepaymentTest extends TestCase {
-
+class LoanRepaymentTest extends TestCase
+{
     use RefreshDatabase;
 
     private User $user;
@@ -31,12 +31,12 @@ class LoanRepaymentTest extends TestCase {
 
         $loan = $this->user->loans()->create([
             'amount_required' => '100',
-            'terms_in_week'   => '3',
+            'terms_in_week' => '3',
         ]);
 
         $this->postJson(route('api.loan-repayments.store', ['loan' => $loan->id, 'repayment']), [
-                'amount' => '50',
-            ]
+            'amount' => '50',
+        ]
         )->assertStatus(202);
 
         $this->assertEquals(1, $loan->loanRepayments()->count());

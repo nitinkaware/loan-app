@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\LoanApproveController;
+use App\Http\Controllers\API\LoanController;
 use App\Http\Controllers\API\LoanRepaymentController;
 use App\Http\Controllers\API\LoginController;
-use App\Http\Controllers\API\LoanController;
-use App\Http\Controllers\API\LoanApproveController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

@@ -13,8 +13,11 @@ class Loan extends Model
     use HasFactory;
 
     const PENDING = 'PENDING';
+
     const APPROVED = 'APPROVED';
+
     const REJECTED = 'REJECTED';
+
     const PAID = 'PAID';
 
     protected $fillable = [
@@ -24,7 +27,7 @@ class Loan extends Model
     ];
 
     protected $casts = [
-        'terms_in_week'   => 'integer',
+        'terms_in_week' => 'integer',
     ];
 
     public function user(): BelongsTo
@@ -37,7 +40,7 @@ class Loan extends Model
         return $this->hasMany(LoanRepayment::class);
     }
 
-    public function approve() :bool
+    public function approve(): bool
     {
         $this->status = self::APPROVED;
 

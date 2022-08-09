@@ -10,7 +10,7 @@ class CreateLoanRepayments
     /**
      * Handle the event.
      *
-     * @param LoanHasApproved $event
+     * @param  LoanHasApproved  $event
      * @return void
      */
     public function handle(LoanHasApproved $event)
@@ -29,7 +29,7 @@ class CreateLoanRepayments
         for ($i = 1; $i <= $loan->terms_in_week; $i++) {
             $repayments[] = [
                 'amount' => $amount,
-                'term'   => $i,
+                'term' => $i,
                 'due_on' => now()->addWeeks($i),
             ];
         }
