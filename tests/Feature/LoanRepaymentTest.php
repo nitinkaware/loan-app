@@ -222,4 +222,30 @@ class LoanRepaymentTest extends TestCase
         ])->assertStatus(422)
             ->assertJsonValidationErrors(['amount_paid' => 'Loan is fully paid.']);
     }
+
+    /**
+     * A user can not make payment more than remaining due amount.
+     *
+     * @return void
+     */
+    public function testAUserCanNotMakePaymentMoreThanRemainingDueAmount()
+    {
+        $this->actingAs($this->user);
+
+        /** @var Loan $loan */
+        $loan = $this->user->loans()->create([
+            'amount_required' => '100',
+            'terms_in_week' => '1',
+        ]);
+
+        $loan->approve();
+
+        $loanRepayments = $loan->loanRepayments()->get();
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[0]->id]), [
+            'amount_paid' => '101',
+        ])->assertUnprocessable();
+
+        $this->assertEquals(100, $loan->remainingDueAmount());
+    }
 }

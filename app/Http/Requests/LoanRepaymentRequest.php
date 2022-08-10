@@ -25,7 +25,7 @@ class LoanRepaymentRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount_paid' => ['bail', 'required', 'numeric', $this->doNotProcessIfLoanIsFullyPaid(), $this->mustBeGreaterThanOrEqualToAmountPayable(), $this->duplicatePaymentNotAllowed()],
+            'amount_paid' => ['bail', 'required', 'numeric', $this->doNotProcessIfLoanIsFullyPaid(), $this->mustBeGreaterThanOrEqualToAmountPayable(), $this->duplicatePaymentNotAllowed(), $this->validateAmountIsNotMoreThanRemainingDueAmount()],
         ];
     }
 
@@ -63,6 +63,15 @@ class LoanRepaymentRequest extends FormRequest
         return function ($attribute, $value, $fail) {
             if ($this->getLoanRepaymentInstance()->loan->remainingDueAmount() == 0) {
                 $fail('Loan is fully paid.');
+            }
+        };
+    }
+
+    private function validateAmountIsNotMoreThanRemainingDueAmount()
+    {
+        return function ($attribute, $value, $fail) {
+            if ($value > $this->getLoanRepaymentInstance()->loan->remainingDueAmount()) {
+                $fail('Amount paid must be less than or equal to remaining due amount.');
             }
         };
     }
