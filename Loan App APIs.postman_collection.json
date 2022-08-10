@@ -1,0 +1,316 @@
+{
+	"info": {
+		"_postman_id": "96cad95e-fcc8-4a7b-ac9d-93c7509adb2e",
+		"name": "Loan App APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "nitin.test@example.com",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Nitin Kaware",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "confirm_password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://loan-app.test/api/register",
+					"protocol": "http",
+					"host": [
+						"loan-app",
+						"test"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "test@example.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "device_name",
+							"value": "Android",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://loan-app.test/api/login",
+					"protocol": "http",
+					"host": [
+						"loan-app",
+						"test"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "admin@example.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "device_name",
+							"value": "Android",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://loan-app.test/api/login",
+					"protocol": "http",
+					"host": [
+						"loan-app",
+						"test"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View my all loan",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 1|C7EHJDabjsg9tw4zC8T65W5i4S3broRdFt5Yhbvv",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://loan-app.test/api/loans",
+					"protocol": "http",
+					"host": [
+						"loan-app",
+						"test"
+					],
+					"path": [
+						"api",
+						"loans"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make a repayment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 1|C7EHJDabjsg9tw4zC8T65W5i4S3broRdFt5Yhbvv",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "amount_paid",
+							"value": "91.10",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://loan-app.test/api/loan-repayments/repayment/2",
+					"protocol": "http",
+					"host": [
+						"loan-app",
+						"test"
+					],
+					"path": [
+						"api",
+						"loan-repayments",
+						"repayment",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request a new loan",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 1|C7EHJDabjsg9tw4zC8T65W5i4S3broRdFt5Yhbvv",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "amount_required",
+							"value": "1000",
+							"type": "text"
+						},
+						{
+							"key": "terms_in_week",
+							"value": "8",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://loan-app.test/api/loan-requests",
+					"protocol": "http",
+					"host": [
+						"loan-app",
+						"test"
+					],
+					"path": [
+						"api",
+						"loan-requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Approve loan",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 2|1JTwZtVbuppSsou3nmuwAtVllHnPaZkiDxyDBqKy",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://loan-app.test/api/loan-requests/approve/220",
+					"protocol": "http",
+					"host": [
+						"loan-app",
+						"test"
+					],
+					"path": [
+						"api",
+						"loan-requests",
+						"approve",
+						"220"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
