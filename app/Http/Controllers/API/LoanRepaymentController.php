@@ -16,7 +16,8 @@ class LoanRepaymentController extends Controller
         ]);
 
         /** @var LoanRepayment $repayment */
-        $repayment = LoanRepayment::join('loans', 'loans.id', '=', 'loan_repayments.loan_id')
+        $repayment = LoanRepayment::select('loan_repayments.*')
+            ->join('loans', 'loans.id', '=', 'loan_repayments.loan_id')
             ->where('loan_repayments.id', $repayment)
             ->where('loans.user_id', auth()->id())
             ->firstOrFail();

@@ -42,9 +42,7 @@ class Loan extends Model
 
     public function remainingDueAmount()
     {
-        return $this->loanRepayments->sum(function (LoanRepayment $loanRepayment) {
-            return $loanRepayment->amount - $loanRepayment->amount_paid;
-        });
+        return $this->amount_required - $this->loanRepayments()->sum('amount_paid');
     }
 
     public function approve(): bool

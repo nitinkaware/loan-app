@@ -49,8 +49,48 @@ class LoanRepaymentTest extends TestCase
         $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[1]->id]), [
             'amount_paid' => '25',
         ])->assertStatus(202);
-//
+
         $this->assertEquals(50, $loan->fresh()->remainingDueAmount());
+    }
+
+    /**
+     * A customer can not submit a weekly loan repayment if the loan is not approved.
+     *
+     * @return void
+     */
+    public function testACustomerCanNotSubmitALoanRepaymentIfTheLoanIsNotApproved()
+    {
+        $this->fail('Not implemented');
+    }
+
+    /**
+     * A customer can not make a payment if the amount is less than the amount due for that week.
+     *
+     * @return void
+     */
+    public function testACustomerCanNotMakeAPaymentIfTheAmountIsLessThanTheAmountDueForThatWeek()
+    {
+        $this->fail('Not implemented');
+    }
+
+    /**
+     * Loan terms can not be in decimal.
+     *
+     * @return void
+     */
+    public function testLoanTermsCanNotBeInDecimal()
+    {
+        $this->fail('Not implemented');
+    }
+
+    /**
+     * When a user makes a full repayment, the loan status should be updated to paid.
+     *
+     * @return void
+     */
+    public function testWhenAUserMakesAFullRepaymentTheLoanStatusShouldBeUpdatedToPaid()
+    {
+        $this->fail('Not implemented');
     }
 
     /**
@@ -60,14 +100,16 @@ class LoanRepaymentTest extends TestCase
      */
     public function testDuplicateRepaymentIsNotAllowedForSingleRepaymentId()
     {
+        $this->fail('Not implemented');
     }
 
     /**
-     * A user can only make replayment for only related loan id that belongs to him.
+     * A user can only make repayment for only related loan id that belongs to him.
      *
      * @return void
      */
     public function testAUserCanOnlyMakeRepaymentForOnlyRelatedLoanIdThatBelongsToHim()
     {
+        $this->fail('Not implemented');
     }
 }

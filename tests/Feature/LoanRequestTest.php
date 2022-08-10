@@ -73,4 +73,34 @@ class LoanRequestTest extends TestCase
             $this->assertCount(0, Loan::all());
         }
     }
+
+    /**
+     * A loan amount must be positive number
+     *
+     * @return void
+     */
+    public function testALoanAmountMustBePositiveNumber()
+    {
+        $this->fail('Not implemented');
+    }
+
+    /**
+     * A loan terms must be positive number
+     *
+     * @return void
+     */
+    public function testALoanTermsMustBePositiveNumber()
+    {
+        $this->fail('Not implemented');
+    }
+
+    /**
+     * A loan terms must be greater than 0
+     *
+     * @return void
+     */
+    public function testALoanTermsMustBeGreaterThan0()
+    {
+        $this->fail('Not implemented');
+    }
 }
