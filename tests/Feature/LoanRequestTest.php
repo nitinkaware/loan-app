@@ -21,6 +21,21 @@ class LoanRequestTest extends TestCase
     }
 
     /**
+     * Admin should not be able to request a loan
+     *
+     * @return void
+     */
+    public function testAdminShouldNotBeAbleToRequestALoan()
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)->postJson(route('api.loan-requests'), [
+            'amount_required' => '100',
+            'terms_in_week' => '4',
+        ])->assertStatus(403);
+    }
+
+    /**
      * A user can request a loan
      *
      * @return void

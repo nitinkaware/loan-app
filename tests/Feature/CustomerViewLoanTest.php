@@ -44,7 +44,9 @@ class CustomerViewLoanTest extends TestCase
                             '*' => [
                                 'id',
                                 'amountPayable',
-                                'paidOn',
+                                'amountPaid',
+                                'isPaid',
+                                'dueOn',
                             ],
                         ],
                     ],

@@ -16,6 +16,10 @@ class LoanRepayment extends Model
         'due_on',
     ];
 
+    protected $casts = [
+        'due_on' => 'date',
+    ];
+
     public function loan(): BelongsTo
     {
         return $this->belongsTo(Loan::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Loan;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class LoanCollection extends ResourceCollection
@@ -14,19 +15,22 @@ class LoanCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return $this->collection->map(function ($loan) {
+        return $this->collection->map(function (Loan $loan) {
             return [
                 'loanId' => $loan->id,
                 'amountRequested' => $loan->amount_required,
+                'amountRemaining' => $loan->remainingDueAmount(),
                 'termsInWeeks' => $loan->terms_in_week,
                 'loanStatus' => $loan->status,
-                'createdAt' => $loan->created_at,
-                'updatedAt' => $loan->updated_at,
+                'createdAt' => $loan->created_at->format('jS F Y h:i:s A'),
+                'updatedAt' => $loan->updated_at->format('jS F Y h:i:s A'),
                 'repaymentsHistory' => $loan->loanRepayments->map(function ($loanRepayment) {
                     return [
                         'id' => $loanRepayment->id,
-                        'amountPayable' => $loanRepayment->amount,
-                        'paidOn' => $loanRepayment->due_on,
+                        'amountPayable' => floatval($loanRepayment->amount),
+                        'amountPaid' => floatval($loanRepayment->amount_paid),
+                        'isPaid' => $loanRepayment->amount_paid > 0,
+                        'dueOn' => $loanRepayment->due_on->format('jS F Y'),
                     ];
                 }),
             ];

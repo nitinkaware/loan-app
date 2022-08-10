@@ -95,7 +95,7 @@ class LoanRepaymentTest extends TestCase
         $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[0]->id]), [
             'amount_paid' => '24',
         ])->assertStatus(422)
-            ->assertJsonValidationErrors(['amount_paid' => 'Amount paid must be less than or equal to amount payable.']);
+            ->assertJsonValidationErrors(['amount_paid' => 'Amount paid must be greater than or equal to amount payable.']);
     }
 
     /**

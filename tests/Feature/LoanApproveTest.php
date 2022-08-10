@@ -59,4 +59,27 @@ class LoanApproveTest extends TestCase
             Loan::find($loan->id)->loanRepayments()->first()->amount
         );
     }
+
+    /**
+     * A loan can not be approved multiple times.
+     *
+     * @return void
+     */
+    public function testALoanCanNotBeApprovedMultipleTimes()
+    {
+        $this->actingAs($this->user);
+
+        $loan = $this->user->loans()->create([
+            'amount_required' => '100',
+            'terms_in_week' => '3',
+        ]);
+
+        $this->postJson(
+            route('api.loan-requests.approve', ['loan' => $loan->id])
+        )->assertStatus(202);
+
+        $this->postJson(
+            route('api.loan-requests.approve', ['loan' => $loan->id])
+        )->assertStatus(422);
+    }
 }

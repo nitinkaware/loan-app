@@ -65,4 +65,9 @@ class Loan extends Model
     {
         return number_format($this->amount_required / $this->terms_in_week, 2);
     }
+
+    public function isApproved(): bool
+    {
+        return $this->status === self::APPROVED;
+    }
 }

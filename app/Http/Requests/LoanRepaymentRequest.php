@@ -33,7 +33,7 @@ class LoanRepaymentRequest extends FormRequest
     {
         return function ($attribute, $value, $fail) {
             if ($value < $this->getLoanRepaymentInstance()->amount) {
-                $fail('Amount paid must be less than or equal to amount payable.');
+                $fail('Amount paid must be greater than or equal to amount payable.');
             }
         };
     }
