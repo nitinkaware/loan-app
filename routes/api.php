@@ -21,9 +21,11 @@ Route::post('login', [LoginController::class, 'index']);
 Route::post('register', [LoginController::class, 'register']);
 
 Route::middleware('auth:sanctum')->name('api.')->group(function () {
-    Route::get('loans', [CustomerLoanViewController::class, 'index'])->name('loans.index');
-    Route::post('loan-requests', [LoanController::class, 'store'])->name('loan-requests');
-    Route::post('loan-repayments/repayment/{repayment}', [LoanRepaymentController::class, 'store'])->name('loan-repayments.store');
+    Route::middleware('user')->group(function () {
+        Route::get('loans', [CustomerLoanViewController::class, 'index'])->name('loans.index');
+        Route::post('loan-requests', [LoanController::class, 'store'])->name('loan-requests');
+        Route::post('loan-repayments/repayment/{repayment}', [LoanRepaymentController::class, 'store'])->name('loan-repayments.store');
+    });
 
     Route::middleware('admin')->group(function () {
         Route::post('loan-requests/approve/{loan}', [LoanApproveController::class, 'store'])->name('loan-requests.approve');
