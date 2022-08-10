@@ -113,12 +113,12 @@ composer install
 
 Start the server with [Sail](https://laravel.com/docs/master/sail#starting-and-stopping-sail) - [(make sure you have docker installed)](https://docs.docker.com/get-docker/) OR Laravel Valet (Valet Preferences)
 
+Run tests
 ```bash
-vendor/bin/sail up -d
+php artisan test
 ```
 
-Run migrations
-
+Run migrations and seed the database
 ```bash
-vendor/bin/sail artisan migrate
+php artisan migrate:fresh --seed
 ```
