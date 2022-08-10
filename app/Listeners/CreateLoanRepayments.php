@@ -29,7 +29,6 @@ class CreateLoanRepayments
         for ($i = 1; $i <= $loan->terms_in_week; $i++) {
             $repayments[] = [
                 'amount' => $amount,
-                'term' => $i,
                 'due_on' => now()->addWeeks($i),
             ];
         }
