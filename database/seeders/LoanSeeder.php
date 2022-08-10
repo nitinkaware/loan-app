@@ -15,7 +15,31 @@ class LoanSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::inRandomOrder()->take(10)->get();
+        $this->forceSeedFirstUser();
+        $this->seedRandomUsers();
+    }
+
+    public function forceSeedFirstUser(): void
+    {
+        //Force seeder first user with loans
+        $user = User::first();
+
+        $user->each(function ($user) {
+            $user->loans()->saveMany(Loan::factory(10)->make(['user_id' => $user->id]));
+        });
+
+        $user->loans()->take(2)->get()->each(function (Loan $loan) {
+            $loan->approve();
+        });
+    }
+
+    public function seedRandomUsers(): void
+    {
+        //Seed random users.
+        $users = User::inRandomOrder()
+            ->where('id', '<>', 1)
+            ->take(10)
+            ->get();
 
         $users->each(function (User $user) {
             Loan::factory()
