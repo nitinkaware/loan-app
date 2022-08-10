@@ -16,9 +16,7 @@
 - Laravel Framework 9.19.0
 - MySQL 8.0
 
-### Your Tech Stack
-
-_Put an `x` in all the boxes that apply and fill all the information between `<>`. **Add more boxes if needed**._
+### My Tech Stack
 
 - [X] PHPStorm
 - [X] MySql
