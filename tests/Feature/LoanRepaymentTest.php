@@ -247,5 +247,27 @@ class LoanRepaymentTest extends TestCase
         ])->assertUnprocessable();
 
         $this->assertEquals(100, $loan->remainingDueAmount());
+
+        /** @var Loan $secondLoan */
+        $secondLoan = $this->user->loans()->create([
+            'amount_required' => '100',
+            'terms_in_week' => '4',
+        ]);
+
+        $secondLoan->approve();
+
+        $secondLoanRepayments = $secondLoan->loanRepayments()->take(3)->get();
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $secondLoanRepayments[0]->id]), [
+            'amount_paid' => 50,
+        ])->assertStatus(202);
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $secondLoanRepayments[1]->id]), [
+            'amount_paid' => 26,
+        ])->assertStatus(202);
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $secondLoanRepayments[2]->id]), [
+            'amount_paid' => 25,
+        ])->assertUnprocessable();
     }
 }
