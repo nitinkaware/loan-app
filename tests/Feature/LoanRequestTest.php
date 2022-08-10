@@ -81,17 +81,34 @@ class LoanRequestTest extends TestCase
      */
     public function testALoanAmountMustBePositiveNumber()
     {
-        $this->fail('Not implemented');
+        $this->actingAs($this->user);
+
+        $response = $this->postJson(route('api.loan-requests'), [
+            'amount_required' => '-100',
+            'terms_in_week' => '6',
+        ]);
+
+        $response->assertUnprocessable();
+
+        $this->assertCount(0, Loan::all());
     }
 
     /**
-     * A loan terms must be positive number
+     * Loan terms can not be in decimal.
      *
      * @return void
      */
-    public function testALoanTermsMustBePositiveNumber()
+    public function testLoanTermsCanNotBeInDecimal()
     {
-        $this->fail('Not implemented');
+        $this->actingAs($this->user);
+
+        $response = $this->postJson(route('api.loan-requests'), [
+            'amount_required' => '100',
+            'terms_in_week' => '6.5',
+        ]);
+
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors(['terms_in_week' => 'Terms in week must be an integer.']);
     }
 
     /**
@@ -101,6 +118,14 @@ class LoanRequestTest extends TestCase
      */
     public function testALoanTermsMustBeGreaterThan0()
     {
-        $this->fail('Not implemented');
+        $this->actingAs($this->user);
+
+        $response = $this->postJson(route('api.loan-requests'), [
+            'amount_required' => '100',
+            'terms_in_week' => '0',
+        ]);
+
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors(['terms_in_week' => 'The terms in week must be at least 1.']);
     }
 }

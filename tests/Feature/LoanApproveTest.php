@@ -40,6 +40,7 @@ class LoanApproveTest extends TestCase
                 'terms_in_week' => '3',
             ]);
 
+        /** @var Loan $loan */
         $loan = Loan::first();
 
         $this->postJson(
@@ -51,7 +52,7 @@ class LoanApproveTest extends TestCase
             Loan::find($loan->id)->loanRepayments()->count()
         );
 
-        $amountPerWeek = $loan->amount_required / $loan->terms_in_week;
+        $amountPerWeek = $loan->amountPerWeek();
 
         $this->assertEquals(
             $amountPerWeek,

@@ -22,13 +22,11 @@ class CreateLoanRepayments
 
     private function getRepayments(Loan $loan): array
     {
-        $amount = $loan->amount_required / $loan->terms_in_week;
-
         $repayments = [];
 
         for ($i = 1; $i <= $loan->terms_in_week; $i++) {
             $repayments[] = [
-                'amount' => number_format($amount, 2),
+                'amount' => $loan->amountPerWeek(),
                 'due_on' => now()->addWeeks($i),
             ];
         }

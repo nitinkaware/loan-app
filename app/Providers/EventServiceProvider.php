@@ -3,11 +3,12 @@
 namespace App\Providers;
 
 use App\Events\LoanHasApproved;
+use App\Events\LoanRepaymentPaid;
 use App\Listeners\CreateLoanRepayments;
+use App\Listeners\HandleLoanRepaymentPaid;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         LoanHasApproved::class => [
             CreateLoanRepayments::class,
+        ],
+        LoanRepaymentPaid::class => [
+            HandleLoanRepaymentPaid::class,
         ],
     ];
 

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Loan;
+use App\Models\LoanRepayment;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -60,7 +61,16 @@ class LoanRepaymentTest extends TestCase
      */
     public function testACustomerCanNotSubmitALoanRepaymentIfTheLoanIsNotApproved()
     {
-        $this->fail('Not implemented');
+        $this->actingAs($this->user);
+
+        $loan = $this->user->loans()->create([
+            'amount_required' => '100',
+            'terms_in_week' => '4',
+        ]);
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => 1]), [
+            'amount_paid' => '25',
+        ])->assertStatus(404);
     }
 
     /**
@@ -70,17 +80,22 @@ class LoanRepaymentTest extends TestCase
      */
     public function testACustomerCanNotMakeAPaymentIfTheAmountIsLessThanTheAmountDueForThatWeek()
     {
-        $this->fail('Not implemented');
-    }
+        $this->actingAs($this->user);
 
-    /**
-     * Loan terms can not be in decimal.
-     *
-     * @return void
-     */
-    public function testLoanTermsCanNotBeInDecimal()
-    {
-        $this->fail('Not implemented');
+        /** @var Loan $loan */
+        $loan = $this->user->loans()->create([
+            'amount_required' => '100',
+            'terms_in_week' => '4',
+        ]);
+
+        $loan->approve();
+
+        $loanRepayments = $loan->loanRepayments()->get();
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[0]->id]), [
+            'amount_paid' => '24',
+        ])->assertStatus(422)
+            ->assertJsonValidationErrors(['amount_paid' => 'Amount paid must be less than or equal to amount payable.']);
     }
 
     /**
@@ -90,7 +105,27 @@ class LoanRepaymentTest extends TestCase
      */
     public function testWhenAUserMakesAFullRepaymentTheLoanStatusShouldBeUpdatedToPaid()
     {
-        $this->fail('Not implemented');
+        $this->actingAs($this->user);
+
+        /** @var Loan $loan */
+        $loan = $this->user->loans()->create([
+            'amount_required' => '100',
+            'terms_in_week' => '4',
+        ]);
+
+        $loan->approve();
+
+        $loanRepayments = $loan->loanRepayments()->get();
+
+        $loanRepayments->each(function (LoanRepayment $loanRepayment) {
+            $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayment->id]), [
+                'amount_paid' => $loanRepayment->amount,
+            ])->assertStatus(202);
+        });
+
+        $this->assertEquals(0, $loan->remainingDueAmount());
+
+        $this->assertEquals(Loan::PAID, $loan->fresh()->status);
     }
 
     /**
@@ -100,7 +135,26 @@ class LoanRepaymentTest extends TestCase
      */
     public function testDuplicateRepaymentIsNotAllowedForSingleRepaymentId()
     {
-        $this->fail('Not implemented');
+        $this->actingAs($this->user);
+
+        /** @var Loan $loan */
+        $loan = $this->user->loans()->create([
+            'amount_required' => '100',
+            'terms_in_week' => '4',
+        ]);
+
+        $loan->approve();
+
+        $loanRepayments = $loan->loanRepayments()->get();
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[0]->id]), [
+            'amount_paid' => '25',
+        ])->assertStatus(202);
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[0]->id]), [
+            'amount_paid' => '25',
+        ])->assertStatus(422)
+            ->assertJsonValidationErrors(['amount_paid' => 'Duplicate repayment is not allowed.']);
     }
 
     /**
@@ -110,6 +164,62 @@ class LoanRepaymentTest extends TestCase
      */
     public function testAUserCanOnlyMakeRepaymentForOnlyRelatedLoanIdThatBelongsToHim()
     {
-        $this->fail('Not implemented');
+        $this->actingAs($this->user);
+
+        $user2 = User::factory()->create();
+
+        /** @var Loan $loan */
+        $loan = $this->user->loans()->create([
+            'amount_required' => '100',
+            'terms_in_week' => '4',
+        ]);
+
+        $loan->approve();
+
+        $loanRepayments = $loan->loanRepayments()->get();
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[0]->id]), [
+            'amount_paid' => '25',
+        ])->assertStatus(202);
+
+        $this->actingAs($user2);
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[0]->id]), [
+            'amount_paid' => '25',
+        ])->assertStatus(404);
+    }
+
+    /**
+     * Once the loan is fully paid, the user can not make any repayment.
+     *
+     * @return void
+     */
+    public function testOnceTheLoanIsFullyPaidTheUserCanNotMakeAnyRepayment()
+    {
+        $this->actingAs($this->user);
+
+        $loan = $this->user->loans()->create([
+            'amount_required' => '100',
+            'terms_in_week' => '4',
+        ]);
+
+        $loan->approve();
+
+        $loanRepayments = $loan->loanRepayments()->get();
+
+        $loanRepayments->each(function (LoanRepayment $loanRepayment) {
+            $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayment->id]), [
+                'amount_paid' => $loanRepayment->amount,
+            ])->assertStatus(202);
+        });
+
+        $this->assertEquals(0, $loan->remainingDueAmount());
+
+        $this->assertEquals(Loan::PAID, $loan->fresh()->status);
+
+        $this->postJson(route('api.loan-repayments.store', ['repayment' => $loanRepayments[0]->id]), [
+            'amount_paid' => '25',
+        ])->assertStatus(422)
+            ->assertJsonValidationErrors(['amount_paid' => 'Loan is fully paid.']);
     }
 }

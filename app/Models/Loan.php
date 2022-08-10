@@ -60,4 +60,9 @@ class Loan extends Model
     {
         return $this->remainingDueAmount() === 0;
     }
+
+    public function amountPerWeek(): float
+    {
+        return number_format($this->amount_required / $this->terms_in_week, 2);
+    }
 }

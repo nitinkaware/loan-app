@@ -24,8 +24,26 @@ class LoanRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount_required' => ['required', 'numeric'],
-            'terms_in_week' => ['required', 'numeric'],
+            'amount_required' => ['required', 'numeric', 'min:1'],
+            'terms_in_week' => ['required', 'numeric', 'min:1', $this->mustNotBeDecimal()],
         ];
+    }
+
+    private function mustNotBeDecimal()
+    {
+        return function ($attribute, $value, $fail) {
+            if (str_contains($value, '.')) {
+                $fail('Terms in week must be an integer.');
+            }
+        };
+    }
+
+    private function mustBePositive()
+    {
+        return function ($attribute, $value, $fail) {
+            if ($value < 1) {
+                $fail('Terms in week must be greater than or equal to 1.');
+            }
+        };
     }
 }
