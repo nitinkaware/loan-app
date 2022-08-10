@@ -23,6 +23,43 @@
 - [X] Laravel
 - [X] Some spatie packages
 
+## Instructions to run the app
+
+- Composer install
+- Copy the `.env.example` to `.env` and fill the values
+- php artisan key:generate && php artisan migrate:fresh --seed
+- Use the postman collection to test the api
+
+[Clone the project](https://github.com/nitinkaware/loan-app)
+
+```bash
+git clone https://github.com/nitinkaware/loan-app
+```
+
+Go to the project directory
+
+```bash
+cd loan-app
+```
+
+Install dependencies
+
+```bash
+composer install
+```
+
+Start the server with [Sail](https://laravel.com/docs/master/sail#starting-and-stopping-sail) - [(make sure you have docker installed)](https://docs.docker.com/get-docker/) OR Laravel Valet (Valet Preferences)
+
+Run tests
+```bash
+php artisan test
+```
+
+Run migrations and seed the database
+```bash
+php artisan migrate:fresh --seed
+```
+
 ### API Reference
 
 #### Register a user
@@ -85,40 +122,3 @@ GET /api/loans
 | Parameter | Type     | Description   |
 | :-------- | :------- | :------------ |
 | `cursor`  | `string` | **Optional** |
-
-## Instructions to run the app
-
-- Composer install
-- Copy the `.env.example` to `.env` and fill the values
-- php artisan key:generate && php artisan migrate:fresh --seed
-- Use the postman collection to test the api
-
-[Clone the project](https://github.com/nitinkaware/loan-app)
-
-```bash
-git clone https://github.com/nitinkaware/loan-app
-```
-
-Go to the project directory
-
-```bash
-cd loan-app
-```
-
-Install dependencies
-
-```bash
-composer install
-```
-
-Start the server with [Sail](https://laravel.com/docs/master/sail#starting-and-stopping-sail) - [(make sure you have docker installed)](https://docs.docker.com/get-docker/) OR Laravel Valet (Valet Preferences)
-
-Run tests
-```bash
-php artisan test
-```
-
-Run migrations and seed the database
-```bash
-php artisan migrate:fresh --seed
-```
